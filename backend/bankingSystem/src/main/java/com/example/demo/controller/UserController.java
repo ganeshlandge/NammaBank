@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,7 +26,7 @@ public class UserController {
 	private UserRepository userRepository;
 	
 	@PostMapping("/user")
-	User addUser(@RequestBody @Valid User newUser) {
+	User addUser(@RequestBody User newUser) {
 		return userRepository.save(newUser);
 	}
 	
@@ -37,6 +38,10 @@ public class UserController {
 	User getUserById(@PathVariable long id) {
 		return userRepository.findById(id)
 				.orElseThrow(()->new UserNotFoundException("User with id " + id + " does not exists"));
+	}
+	@PutMapping("/user/{id}")
+	User updateUser(@RequestBody User user, @PathVariable long id) {
+		return userRepository.save(user);
 	}
 	
 }
