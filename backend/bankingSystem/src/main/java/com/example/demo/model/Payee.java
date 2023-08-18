@@ -15,28 +15,29 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Embeddable
 class PayeeId implements Serializable {
-    private Long account_num;
-    private Long payee_acc_num;
+    private Long accountNum;
+    private Long payeeAccNum;
 	public PayeeId() {
 		super();
 	}
-	public PayeeId(Long account_num, Long payee_acc_num) {
+	public PayeeId(Long accountNum, Long payeeAccNum) {
 		super();
-		this.account_num = account_num;
-		this.payee_acc_num = payee_acc_num;
+		this.accountNum = accountNum;
+		this.payeeAccNum = payeeAccNum;
 	}
-	public Long getAcc_num() {
-		return account_num;
+	public Long getAccountNum() {
+		return accountNum;
 	}
-	public void setAcc_num(Long account_num) {
-		this.account_num = account_num;
+	public void setAccountNum(Long accountNum) {
+		this.accountNum = accountNum;
 	}
-	public Long getPayee_acc_num() {
-		return payee_acc_num;
+	public Long getPayeeAccNum() {
+		return payeeAccNum;
 	}
-	public void setPayee_acc_num(Long payee_acc_num) {
-		this.payee_acc_num = payee_acc_num;
+	public void setPayeeAccNum(Long payeeAccNum) {
+		this.payeeAccNum = payeeAccNum;
 	}
+	
 }
 
 
@@ -46,11 +47,11 @@ public class Payee {
     @EmbeddedId
     private PayeeId id;
     private String name;
-	private String nick_name;
+	private String nickName;
 
     @ManyToOne
-    @MapsId("account_num")
-    @JoinColumn(name = "account_num")
+    @MapsId("accountNum")
+    @JoinColumn(name = "accountNum")
     @JsonBackReference
     private Account account;
 
@@ -58,11 +59,11 @@ public class Payee {
 		super();
 	}
 
-	public Payee(PayeeId id, String name, String nick_name, Account account) {
+	public Payee(PayeeId id, String name, String nickName, Account account) {
 		super();
 		this.id = id;
 		this.name = name;
-		this.nick_name = nick_name;
+		this.nickName = nickName;
 		this.account = account;
 	}
 
@@ -82,12 +83,12 @@ public class Payee {
 		this.name = name;
 	}
 
-	public String getNick_name() {
-		return nick_name;
+	public String getNickName() {
+		return nickName;
 	}
 
-	public void setNick_name(String nick_name) {
-		this.nick_name = nick_name;
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
 	}
 
 	public Account getAccount() {
@@ -97,5 +98,5 @@ public class Payee {
 	public void setAccount(Account account) {
 		this.account = account;
 	}
-    
+
 }

@@ -17,122 +17,89 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 public class Transcation {
 	@Id
 	@GeneratedValue
-	private long transcaction_id;
-	private String transcation_type;
-	private double amount_transfer;
-	private long credit_acc_num;
+	private long transcactionId;
+	private String transcationType;
+	private double amountTransfer;
+	private long creditAccNum;
 //	private long deb_acc_num;
 	private long timestamp;
 	private String remark;
 	
 	@ManyToOne
-	@JoinColumn(name = "deb_acc_num", referencedColumnName = "account_num", nullable = false)
+	@JoinColumn(name = "deb_acc_num", referencedColumnName = "accountNum", nullable = false)
 	@JsonBackReference
 	private Account account;
-	
-	
 
 	public Transcation() {
 		super();
 	}
 
-
-
-	public Transcation(long transcaction_id, String transcation_type, double amount_transfer, long credit_acc_num,
+	public Transcation(long transcactionId, String transcationType, double amountTransfer, long creditAccNum,
 			long timestamp, String remark, Account account) {
 		super();
-		this.transcaction_id = transcaction_id;
-		this.transcation_type = transcation_type;
-		this.amount_transfer = amount_transfer;
-		this.credit_acc_num = credit_acc_num;
+		this.transcactionId = transcactionId;
+		this.transcationType = transcationType;
+		this.amountTransfer = amountTransfer;
+		this.creditAccNum = creditAccNum;
 		this.timestamp = timestamp;
 		this.remark = remark;
 		this.account = account;
 	}
 
-
-
-	public long getTranscaction_id() {
-		return transcaction_id;
+	public long getTranscactionId() {
+		return transcactionId;
 	}
 
-
-
-	public void setTranscaction_id(long transcaction_id) {
-		this.transcaction_id = transcaction_id;
+	public void setTranscactionId(long transcactionId) {
+		this.transcactionId = transcactionId;
 	}
 
-
-
-	public String getTranscation_type() {
-		return transcation_type;
+	public String getTranscationType() {
+		return transcationType;
 	}
 
-
-
-	public void setTranscation_type(String transcation_type) {
-		this.transcation_type = transcation_type;
+	public void setTranscationType(String transcationType) {
+		this.transcationType = transcationType;
 	}
 
-
-
-	public double getAmount_tansfer() {
-		return amount_transfer;
+	public double getAmountTransfer() {
+		return amountTransfer;
 	}
 
-
-
-	public void setAmount_tansfer(double amount_tansfer) {
-		this.amount_transfer = amount_tansfer;
+	public void setAmountTransfer(double amountTransfer) {
+		this.amountTransfer = amountTransfer;
 	}
 
-
-
-	public long getCredit_acc_num() {
-		return credit_acc_num;
+	public long getCreditAccNum() {
+		return creditAccNum;
 	}
 
-
-
-	public void setCredit_acc_num(long credit_acc_num) {
-		this.credit_acc_num = credit_acc_num;
+	public void setCreditAccNum(long creditAccNum) {
+		this.creditAccNum = creditAccNum;
 	}
-
-
 
 	public long getTimestamp() {
 		return timestamp;
 	}
 
-
-
 	public void setTimestamp(long timestamp) {
 		this.timestamp = timestamp;
 	}
-
-
 
 	public String getRemark() {
 		return remark;
 	}
 
-
-
 	public void setRemark(String remark) {
 		this.remark = remark;
 	}
-
-
 
 	public Account getAccount() {
 		return account;
 	}
 
-
-
 	public void setAccount(Account account) {
 		this.account = account;
 	}
-	
-	
+
 }

@@ -28,18 +28,17 @@ import lombok.Setter;
 public class Account {
 	@Id
 	@GeneratedValue
-	private long account_num;
-	@Column(nullable = false)
-//	private long user_id;
+	private long accountNum;
+	@Column(nullable = false, unique = true)
 	private String username;
-	private String login_passwd;
-	private String transcation_passwd;
+	private String loginPasswd;
+	private String transcationPasswd;
 	private double balance;
-	private String open_date;
-	private String account_type;
-	private int is_debit_card;
-	private int is_credit_card;
-	private int is_net_banking;
+	private String openDate;
+	private String accountType;
+	private int isDebitCard;
+	private int isCreditCard;
+	private int isNetBanking;
 	private long timestamp;
 	
 	@OneToOne
@@ -62,34 +61,34 @@ public class Account {
 	}
 
 
-	public Account(long account_num, String username, String login_passwd, String transcation_passwd, double balance,
-			String open_date, String account_type, int is_debit_card, int is_credit_card, int is_net_banking,
-			long timestamp, User user, List<Transcation> tr, List<Payee> payee) {
+	public Account(long accountNum, String username, String loginPasswd, String transcationPasswd, double balance,
+			String openDate, String accountType, int isDebitCard, int isCreditCard, int isNetBanking, long timestamp,
+			User user, List<Transcation> transcations, List<Payee> payee) {
 		super();
-		this.account_num = account_num;
+		this.accountNum = accountNum;
 		this.username = username;
-		this.login_passwd = login_passwd;
-		this.transcation_passwd = transcation_passwd;
+		this.loginPasswd = loginPasswd;
+		this.transcationPasswd = transcationPasswd;
 		this.balance = balance;
-		this.open_date = open_date;
-		this.account_type = account_type;
-		this.is_debit_card = is_debit_card;
-		this.is_credit_card = is_credit_card;
-		this.is_net_banking = is_net_banking;
+		this.openDate = openDate;
+		this.accountType = accountType;
+		this.isDebitCard = isDebitCard;
+		this.isCreditCard = isCreditCard;
+		this.isNetBanking = isNetBanking;
 		this.timestamp = timestamp;
 		this.user = user;
-		this.transcations = tr;
+		this.transcations = transcations;
 		this.payee = payee;
 	}
 
 
-	public long getAccount_num() {
-		return account_num;
+	public long getAccountNum() {
+		return accountNum;
 	}
 
 
-	public void setAccount_num(long account_num) {
-		this.account_num = account_num;
+	public void setAccountNum(long accountNum) {
+		this.accountNum = accountNum;
 	}
 
 
@@ -103,23 +102,23 @@ public class Account {
 	}
 
 
-	public String getLogin_passwd() {
-		return login_passwd;
+	public String getLoginPasswd() {
+		return loginPasswd;
 	}
 
 
-	public void setLogin_passwd(String login_passwd) {
-		this.login_passwd = login_passwd;
+	public void setLoginPasswd(String loginPasswd) {
+		this.loginPasswd = loginPasswd;
 	}
 
 
-	public String getTranscation_passwd() {
-		return transcation_passwd;
+	public String getTranscationPasswd() {
+		return transcationPasswd;
 	}
 
 
-	public void setTranscation_passwd(String transcation_passwd) {
-		this.transcation_passwd = transcation_passwd;
+	public void setTranscationPasswd(String transcationPasswd) {
+		this.transcationPasswd = transcationPasswd;
 	}
 
 
@@ -133,53 +132,53 @@ public class Account {
 	}
 
 
-	public String getOpen_date() {
-		return open_date;
+	public String getOpenDate() {
+		return openDate;
 	}
 
 
-	public void setOpen_date(String open_date) {
-		this.open_date = open_date;
+	public void setOpenDate(String openDate) {
+		this.openDate = openDate;
 	}
 
 
-	public String getAccount_type() {
-		return account_type;
+	public String getAccountType() {
+		return accountType;
 	}
 
 
-	public void setAccount_type(String account_type) {
-		this.account_type = account_type;
+	public void setAccountType(String accountType) {
+		this.accountType = accountType;
 	}
 
 
-	public int getIs_debit_card() {
-		return is_debit_card;
+	public int getIsDebitCard() {
+		return isDebitCard;
 	}
 
 
-	public void setIs_debit_card(int is_debit_card) {
-		this.is_debit_card = is_debit_card;
+	public void setIsDebitCard(int isDebitCard) {
+		this.isDebitCard = isDebitCard;
 	}
 
 
-	public int getIs_credit_card() {
-		return is_credit_card;
+	public int getIsCreditCard() {
+		return isCreditCard;
 	}
 
 
-	public void setIs_credit_card(int is_credit_card) {
-		this.is_credit_card = is_credit_card;
+	public void setIsCreditCard(int isCreditCard) {
+		this.isCreditCard = isCreditCard;
 	}
 
 
-	public int getIs_net_banking() {
-		return is_net_banking;
+	public int getIsNetBanking() {
+		return isNetBanking;
 	}
 
 
-	public void setIs_net_banking(int is_net_banking) {
-		this.is_net_banking = is_net_banking;
+	public void setIsNetBanking(int isNetBanking) {
+		this.isNetBanking = isNetBanking;
 	}
 
 
@@ -221,9 +220,5 @@ public class Account {
 	public void setPayee(List<Payee> payee) {
 		this.payee = payee;
 	}
-	
-	
-	
-	
-	
+
 }
