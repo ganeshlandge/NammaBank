@@ -1,7 +1,5 @@
 package com.example.demo.model;
 
-import java.io.Serializable;
-
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -12,33 +10,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-
-@Embeddable
-class PayeeId implements Serializable {
-    private Long accountNum;
-    private Long payeeAccNum;
-	public PayeeId() {
-		super();
-	}
-	public PayeeId(Long accountNum, Long payeeAccNum) {
-		super();
-		this.accountNum = accountNum;
-		this.payeeAccNum = payeeAccNum;
-	}
-	public Long getAccountNum() {
-		return accountNum;
-	}
-	public void setAccountNum(Long accountNum) {
-		this.accountNum = accountNum;
-	}
-	public Long getPayeeAccNum() {
-		return payeeAccNum;
-	}
-	public void setPayeeAccNum(Long payeeAccNum) {
-		this.payeeAccNum = payeeAccNum;
-	}
-	
-}
 
 
 @Entity
