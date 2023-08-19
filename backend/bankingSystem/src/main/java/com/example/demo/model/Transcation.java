@@ -7,7 +7,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -26,7 +25,7 @@ public class Transcation {
 	private String remark;
 	
 	@ManyToOne
-	@JoinColumn(name = "deb_acc_num", referencedColumnName = "accountNum", nullable = false)
+	@JoinColumn(name = "debitAccNum", referencedColumnName = "accountNum", nullable = false)
 	@JsonBackReference
 	private Account account;
 

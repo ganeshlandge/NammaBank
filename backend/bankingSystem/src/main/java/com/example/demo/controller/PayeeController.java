@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,8 +23,8 @@ public class PayeeController {
 		return payeeRepository.save(payee);
 	}
 	
-	@GetMapping("/payee")
-	public List<Payee> getPayee(@RequestBody PayeeId payeeID) {
-		return payeeRepository.findByIdAccountNum(payeeID.getAccountNum());
+	@GetMapping("/payee/{accountNum}")
+	public List<Payee> getPayee(@PathVariable Long accountNum) {
+		return payeeRepository.findByIdAccountNum(accountNum);
 	}
 }
