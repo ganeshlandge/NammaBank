@@ -1,6 +1,6 @@
 package com.example.demo.dto;
 
-public class TranscationSummaryDTO {
+public class TranscationDTO {
 	private long transcactionId;
 	private String transcationType;
 	private double amountTransfer;
@@ -9,11 +9,11 @@ public class TranscationSummaryDTO {
 	private long timestamp;
 	private String remark;
 	
-	public TranscationSummaryDTO() {
+	public TranscationDTO() {
 		super();
 	}
 
-	public TranscationSummaryDTO(long transcactionId, String transcationType, double amountTransfer, long creditAccNum,
+	public TranscationDTO(long transcactionId, String transcationType, double amountTransfer, long creditAccNum,
 			long debitAccNum, long timestamp, String remark) {
 		super();
 		this.transcactionId = transcactionId;
