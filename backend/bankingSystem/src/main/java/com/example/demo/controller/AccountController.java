@@ -43,6 +43,9 @@ public class AccountController {
 	@Autowired
 	private UserRepository userRepository;
 	
+	@Autowired
+	private EmailController emailController;
+	
 	
 	
 	@PostMapping("/netbanking/login")
@@ -73,19 +76,30 @@ public class AccountController {
         }
 	}
 	
-
 	
-
 	@PostMapping("/netbanking/forgot_username")
 	public ResponseEntity<?> fogotUsername(@RequestBody Account account) {
 		Optional<Account> currentAccount = accountRepository.findById(account.getAccountNum());
 		if(currentAccount.isPresent()) {
 			System.out.println("Username is " + currentAccount.get().getUsername());
+			
 			if(currentAccount.get().getUsername().isBlank() || currentAccount.get().getUsername().isEmpty()) {
 				throw new BadRequestException("Invalid request. This account is not registered for netbanking");
 			}
+			User user = currentAccount.get().getUser();
+			if (user.getEmail() == null || user.getEmail().isBlank() || user.getEmail().isEmpty()) {
+		        throw new BadRequestException("Invalid request. Email error!x This account is not registered for netbanking");
+		    }
+			String email = user.getEmail();
+			
 			Random random = new Random();
 	        int code = random.nextInt(9000) + 1000; // Generate a number between 1000 and 9999
+	        
+	        String subject = "Forgot Username - OTP";
+	        String text = "Your username is: " + currentAccount.get().getUsername() + "\nYour OTP is: " + code;
+	        
+	        emailController.sendEmail(email, subject, text);
+	        
 	        Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
 			forgotUsernameRepository.save(new ForgotUsername(currentAccount.get().getAccountNum(), currentAccount.get().getUsername(), code, currentTimestamp));
 	        return ResponseEntity.ok(new SuccessResponse<>("OTP generated successfully", String.valueOf(code)));
@@ -107,7 +121,7 @@ public class AccountController {
 	        if(seconds > 60) {
 	        	throw new BadRequestException("OTP expired. Please generate again");
 	        }
-	        return ResponseEntity.ok(new SuccessResponse<>("OTP generated successfully", currentFgPass.get().getUsername()));
+	        return ResponseEntity.ok(new SuccessResponse<>("Valid OTP"));
 		}
 		throw new ResourceNotFoundException("Account " + fgusername.getAccountNum() + " does not exists");
 	}
@@ -120,8 +134,20 @@ public class AccountController {
 			if(currentAccount.get().getUsername().isBlank() || currentAccount.get().getUsername().isEmpty()) {
 				throw new BadRequestException("Invalid request. This account is not registered for netbanking");
 			}
+
+			User user = currentAccount.get().getUser();
+			if (user.getEmail() == null || user.getEmail().isBlank() || user.getEmail().isEmpty()) {
+		        throw new BadRequestException("Invalid request. Email error!x This account is not registered for netbanking");
+		    }
+			String email = user.getEmail();
+			
 			Random random = new Random();
 	        int code = random.nextInt(9000) + 1000; // Generate a number between 1000 and 9999
+	        String subject = "Forgot password - OTP";
+	        String text = "Your password reset OTP is: " + code;
+	        
+	        emailController.sendEmail(email, subject, text);
+	        
 	        Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
 			forgotPasswordRepository.save(new ForgotPassword(currentAccount.get().getUsername(), code, currentTimestamp));
 	        return ResponseEntity.ok(new SuccessResponse<>("OTP generated successfully", String.valueOf(code)));
