@@ -29,7 +29,7 @@ public class Account {
 	@Id
 	@GeneratedValue
 	private long accountNum;
-	@Column(nullable = false, unique = true)
+	@Column(unique = true)
 	private String username;
 	private String loginPasswd;
 	private String transcationPasswd;

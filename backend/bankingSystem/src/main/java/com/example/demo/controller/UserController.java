@@ -1,7 +1,10 @@
 package com.example.demo.controller;
 
+import java.sql.Timestamp;
+import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
@@ -19,9 +22,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dto.SuccessResponse;
+import com.example.demo.exception.InternalServerException;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.exception.UserNotFoundException;
+import com.example.demo.model.Account;
 import com.example.demo.model.ApiResponse;
+import com.example.demo.model.ForgotPassword;
 import com.example.demo.model.User;
+import com.example.demo.repository.ForgotPasswordRepository;
 import com.example.demo.repository.UserRepository;
 
 
@@ -31,63 +40,60 @@ public class UserController {
 	@Autowired
 	private UserRepository userRepository;
 	
-    @GetMapping("/api/success")
-    public ApiResponse<String> successfulResponse() {
-        String successMessage = "Request was successful!";
-        return new ApiResponse(HttpStatus.OK.value(), successMessage, "");
-    }
-	
 	@PostMapping("/user")
-	public ApiResponse<String> addUser(@RequestBody User newUser) {
+	public ResponseEntity<?>  addUser(@RequestBody User newUser) {
 		try {
 			userRepository.save(newUser);
 		} catch(IllegalArgumentException ex) {
-	        return new ApiResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage(), "");			
-		} catch(ConstraintViolationException ex) {
-	        return new ApiResponse(HttpStatus.BAD_REQUEST.value(), ex.toString(), "");			
-		} catch(Exception ex) {
-	        return new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage(), "");
+	        throw new IllegalArgumentException("Arguments are not valid");			
 		}
-		return new ApiResponse<String>(HttpStatus.OK.value(), "User created successfully", "");
+		SuccessResponse<String> successResponse = new SuccessResponse<>("User created successfully");
+        return ResponseEntity.ok(successResponse);
 	}
 	
 	@GetMapping("/users")
-	List<User> getAllUsers() {
-		return userRepository.findAll();
+	public ResponseEntity<?>  getAllUsers() {
+		List<User> users = userRepository.findAll();
+		SuccessResponse<List<User>> successResponse = new SuccessResponse<>("Fetched users successfully", users);
+        return ResponseEntity.ok(successResponse);
 	}
 	
 	@GetMapping("/user/{id}")
-	User getUserById(@PathVariable long id) {
-		return userRepository.findById(id)
-				.orElseThrow(()->new UserNotFoundException("User with id " + id + " does not exists"));
+	public ResponseEntity<?> getUserById(@PathVariable long id) {
+		Optional<User> user = userRepository.findById(id);
+		if (user.isPresent()) {
+			SuccessResponse<User> successResponse = new SuccessResponse<>("Fetched user successfully", user.get());
+            return ResponseEntity.ok(successResponse);
+        } else {
+            throw new ResourceNotFoundException("User with ID " + id + " not found");
+        }
 	}
 	
 	@PutMapping("/user/address/{id}")
-	public ResponseEntity<String> updateUserAddress(@RequestBody User updatedUser, @PathVariable long id) {
-		try {
-            Optional<User> existingUserOptional = userRepository.findById(id);
+	public ResponseEntity<?> updateUserAddress(@RequestBody User updatedUser, @PathVariable long id) {
+		Optional<User> existingUserOptional = userRepository.findById(id);
 
-            if (existingUserOptional.isPresent()) {
-                User existingUser = existingUserOptional.get();
+        if (existingUserOptional.isPresent()) {
+        	System.out.println("user " + id + "is present");
+            User existingUser = existingUserOptional.get();
 
-                if (updatedUser.getPermAddId() != null) {
-                    existingUser.setPermAddId(updatedUser.getPermAddId());
-                }
-
-                if (updatedUser.getTempAddId() != null) {
-                    existingUser.setTempAddId(updatedUser.getTempAddId());
-                }
-
-                userRepository.save(existingUser);
-
-                return ResponseEntity.ok("User updated successfully");
-            } else {
-                return ResponseEntity.notFound().build();
+            if (updatedUser.getPermAddId() != null) {
+                existingUser.setPermAddId(updatedUser.getPermAddId());
             }
-        } catch (Exception ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating user address");
+
+            if (updatedUser.getTempAddId() != null) {
+                existingUser.setTempAddId(updatedUser.getTempAddId());
+            }
+
+            userRepository.save(existingUser);
+        	System.out.println("user " + id + "is saved");
+            
+    		SuccessResponse<String> successResponse = new SuccessResponse<>("User updated successfully");
+            return ResponseEntity.ok(successResponse);
+
+        } else {
+        	System.out.println("user " + id + "is NOT present");
+            throw new ResourceNotFoundException("User with ID " + id + " not found");
         }
 	}
-
-	
 }
