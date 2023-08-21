@@ -22,6 +22,13 @@ public class ForgotUsername {
 		super();
 	}
 
+	public ForgotUsername(long accountNum, int otp, Timestamp timestamp) {
+		super();
+		this.accountNum = accountNum;
+		this.otp = otp;
+		this.timestamp = timestamp;
+	}
+
 	public ForgotUsername(long accountNum, String username, int otp, Timestamp timestamp) {
 		super();
 		this.accountNum = accountNum;

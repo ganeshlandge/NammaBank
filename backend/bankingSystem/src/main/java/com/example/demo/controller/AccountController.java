@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.dto.AccountDTO;
 import com.example.demo.dto.NewPasswordDTO;
 import com.example.demo.dto.SuccessResponse;
 import com.example.demo.exception.BadRequestException;
@@ -59,24 +60,64 @@ public class AccountController {
 	}
 	
 	@PostMapping("/netbanking/register")
-	public ResponseEntity<?>  register(@RequestBody Account newAccount) {
-		Optional<Account> currentAccount = accountRepository.findById(newAccount.getAccountNum());
+	public ResponseEntity<?>  register(@RequestBody Account account) {
+		Optional<Account> currentAccount = accountRepository.findById(account.getAccountNum());
 		if(currentAccount.isPresent()) {
-			if(currentAccount.get().getUsername().isEmpty() || currentAccount.get().getUsername().isBlank()) {
-				currentAccount.get().setUsername(newAccount.getUsername());
-				currentAccount.get().setLoginPasswd(newAccount.getLoginPasswd());
-				currentAccount.get().setTranscationPasswd(newAccount.getTranscationPasswd());
-				accountRepository.save(currentAccount.get());
-		        return ResponseEntity.ok(new SuccessResponse<>("Registration for Internet Banking is successful"));	
-			} else {
-				throw new ResourceConflictException("User account already exists");
-			}
-		}else {
-            throw new ResourceNotFoundException("Account " + newAccount.getAccountNum() + " does not exists");
-        }
+			User user = currentAccount.get().getUser();
+			if (user.getEmail() == null || user.getEmail().isBlank() || user.getEmail().isEmpty()) {
+		        throw new BadRequestException("Invalid request. Email is not linked with this account.");
+		    }
+			String email = user.getEmail();
+			
+			Random random = new Random();
+	        int code = random.nextInt(9000) + 1000; // Generate a number between 1000 and 9999
+	        
+	        String subject = "Internet Banking registration OTP";
+	        String text = "Your OTP for netbanking registration is: " + code;
+		        
+	        emailController.sendEmail(email, subject, text);
+		        
+	        Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+			forgotUsernameRepository.save(new ForgotUsername(currentAccount.get().getAccountNum(), code, currentTimestamp));
+	        return ResponseEntity.ok(new SuccessResponse<>("OTP generated successfully for netbanking registration", String.valueOf(code)));
+		}
+		throw new ResourceNotFoundException("Account " + account.getAccountNum() + " does not exists");		
 	}
 	
 	
+	@PostMapping("/netbanking/register/validate")
+	public ResponseEntity<?>  registerValidate(@RequestBody AccountDTO newAccount) {
+		Optional<ForgotUsername> currentFgPass = forgotUsernameRepository.findById(newAccount.getAccountNum());
+		if(currentFgPass.isPresent()) {
+			if(newAccount.getOtp() != currentFgPass.get().getOtp()) {
+				throw new BadRequestException("Invalid OTP");
+			}
+			Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+			long millisecondsDifference = currentTimestamp.getTime() - currentFgPass.get().getTimestamp().getTime();
+	        Duration duration = Duration.ofMillis(millisecondsDifference);
+	        long seconds = duration.toSecondsPart();
+	        if(seconds > 60) {
+	        	throw new BadRequestException("OTP expired. Please generate again");
+	        }
+	        Optional<Account> currentAccount = accountRepository.findById(newAccount.getAccountNum());
+			if(currentAccount.isPresent()) {
+				if(currentAccount.get().getUsername().isEmpty() || currentAccount.get().getUsername().isBlank()) {
+					currentAccount.get().setUsername(newAccount.getUsername());
+					currentAccount.get().setLoginPasswd(newAccount.getLoginPasswd());
+					currentAccount.get().setTranscationPasswd(newAccount.getTranscationPasswd());
+					accountRepository.save(currentAccount.get());
+			        return ResponseEntity.ok(new SuccessResponse<>("Registration for Internet Banking is successful"));	
+				} else {
+					throw new ResourceConflictException("User account already exists");
+				}
+			}else {
+	            throw new ResourceNotFoundException("Account " + newAccount.getAccountNum() + " does not exists");
+	        }
+		}
+		throw new ResourceNotFoundException("Account " + newAccount.getAccountNum() + " does not exists");
+	}
+	
+
 	@PostMapping("/netbanking/forgot_username")
 	public ResponseEntity<?> fogotUsername(@RequestBody Account account) {
 		Optional<Account> currentAccount = accountRepository.findById(account.getAccountNum());
