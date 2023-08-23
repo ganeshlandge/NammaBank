@@ -230,7 +230,7 @@ public class AccountController {
 		throw new ResourceNotFoundException("Account does not exists");
 	}
 	
-	@GetMapping("/{username}")
+	@GetMapping("/netbanking/{username}")
 	public ResponseEntity<?> getAccountDetails(@PathVariable String username){
 		Optional<Account> account = accountRepository.findByUsername(username);
 		if(account.isPresent()) {
