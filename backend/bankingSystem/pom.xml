@@ -14,7 +14,11 @@
 	<name>bankingSystem</name>
 	<description>Online Banking System</description>
 	<properties>
+<<<<<<< HEAD
 		<java.version>11</java.version>
+=======
+		<java.version>15</java.version>
+>>>>>>> acaadaa (partial jwt)
 	</properties>
 	<dependencies>
 		<dependency>
