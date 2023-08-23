@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -224,6 +226,15 @@ public class AccountController {
 			accountRepository.save(currentAccount.get());
 //			TODO: check if save operation fails
 	        return ResponseEntity.ok(new SuccessResponse<>("Updated password successfully"));
+		}
+		throw new ResourceNotFoundException("Account does not exists");
+	}
+	
+	@GetMapping("/{username}")
+	public ResponseEntity<?> getAccountDetails(@PathVariable String username){
+		Optional<Account> account = accountRepository.findByUsername(username);
+		if(account.isPresent()) {
+			return ResponseEntity.ok(account.get());
 		}
 		throw new ResourceNotFoundException("Account does not exists");
 	}
