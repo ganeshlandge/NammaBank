@@ -7,11 +7,11 @@ public class JwtResponse {
 	private String jwtToken;
 	private String username;
 	private String email;
-	private String accountNum;
+	private long accountNum;
 	public JwtResponse() {
 		super();
 	}
-	public JwtResponse(String jwtToken, String username, String email, String accountNum) {
+	public JwtResponse(String jwtToken, String username, String email, long accountNum) {
 		super();
 		this.jwtToken = jwtToken;
 		this.username = username;
@@ -36,10 +36,10 @@ public class JwtResponse {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getAccountNum() {
+	public long getAccountNum() {
 		return accountNum;
 	}
-	public void setAccountNum(String accountNum) {
+	public void setAccountNum(long accountNum) {
 		this.accountNum = accountNum;
 	}
 	// Private constructor to prevent direct instantiation
@@ -54,7 +54,7 @@ public class JwtResponse {
         private String jwtToken;
         private String username;
         private String email;
-        private String accountNum;
+        private long accountNum;
 
         public Builder jwtToken(String jwtToken) {
             this.jwtToken = jwtToken;
@@ -71,7 +71,7 @@ public class JwtResponse {
             return this;
         }
 
-        public Builder accountNum(String accountNum) {
+        public Builder accountNum(long accountNum) {
             this.accountNum = accountNum;
             return this;
         }

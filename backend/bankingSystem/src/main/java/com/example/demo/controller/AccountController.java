@@ -100,8 +100,14 @@ public class AccountController {
 
 		UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
 		String token = this.helper.generateToken(userDetails);
-
-		JwtResponse response = new JwtResponse.Builder().jwtToken(token).username(userDetails.getUsername()).build();
+		Optional<Account> account = accountRepository.findByUsername(request.getUsername());
+		
+		JwtResponse response = new JwtResponse.Builder()
+				.jwtToken(token)
+				.username(userDetails.getUsername())
+				.accountNum(account.get().getAccountNum())
+				.email(account.get().getUser().getEmail())
+				.build();
 		return new ResponseEntity<>(response, HttpStatus.OK);
 //		Optional<Account> account = accountRepository.findByUsernameAndLoginPasswd(login.getUsername(), login.getPassword());
 //		if(account.isPresent()) {
