@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
@@ -9,24 +10,21 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 //@Getter
 //@Setter
 //@AllArgsConstructor
 //@NoArgsConstructor
 @Entity
-public class Account {
+public class Account implements UserDetails{
 	@Id
 //	@GeneratedValue
 	private long accountNum;
@@ -101,7 +99,7 @@ public class Account {
 		this.accountNum = accountNum;
 	}
 
-
+	@Override
 	public String getUsername() {
 		return username;
 	}
@@ -230,6 +228,48 @@ public class Account {
 
 	public void setPayee(List<Payee> payee) {
 		this.payee = payee;
+	}
+
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public String getPassword() {
+		// TODO Auto-generated method stub
+		return this.getLoginPasswd();
+	}
+
+
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 
 }
