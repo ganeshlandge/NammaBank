@@ -28,7 +28,7 @@ import lombok.Setter;
 @Entity
 public class Account {
 	@Id
-	@GeneratedValue
+//	@GeneratedValue
 	private long accountNum;
 //	Random random = new Random();
 //    accountNum = random.nextInt(9000) + 1000;
@@ -61,8 +61,13 @@ public class Account {
 
 	public Account() {
 		super();
+		this.accountNum = generateRandomAccountNumber();
 	}
-
+	// Helper method to generate a random 6-digit account number
+    private long generateRandomAccountNumber() {
+        Random random = new Random();
+        return random.nextInt(900000) + 100000; 
+    }
 
 	public Account(long accountNum, String username, String loginPasswd, String transcationPasswd, double balance,
 			String openDate, String accountType, int isDebitCard, int isCreditCard, int isNetBanking, long timestamp,
@@ -128,7 +133,7 @@ public class Account {
 
 
 	public double getBalance() {
-		System.out.println("getBalance: "+ balance);
+//		System.out.println("getBalance: "+ balance);
 		return balance;
 	}
 

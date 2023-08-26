@@ -1,7 +1,6 @@
 package com.example.demo.model;
 
 import java.sql.Date;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,6 +26,7 @@ public class Transcation {
 	
 	@ManyToOne
 	@JoinColumn(name = "debitAccNum", referencedColumnName = "accountNum", nullable = true)
+
 	@JsonBackReference
 	private Account account;
 

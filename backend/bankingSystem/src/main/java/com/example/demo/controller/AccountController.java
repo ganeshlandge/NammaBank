@@ -106,6 +106,21 @@ public class AccountController {
 					currentAccount.get().setLoginPasswd(newAccount.getLoginPasswd());
 					currentAccount.get().setTranscationPasswd(newAccount.getTranscationPasswd());
 					accountRepository.save(currentAccount.get());
+					User user = currentAccount.get().getUser();
+					if (user.getEmail() == null || user.getEmail().isBlank() || user.getEmail().isEmpty()) {
+				        throw new BadRequestException("Invalid request. Email is not linked with this account.");
+				    }
+					String email = user.getEmail();
+					String subject = "Internet Banking registration completed";
+			        String text = "Congratulations! "
+			        		+ "\n\n Dear " + user.getFirstName() 
+			        		+ ",\n Your netbanking registration is now complete. "
+			        		+ "\n\n You can log in using your username" + currentAccount.get().getUsername() +" and the password you've set during the registration process. "
+			        		+ "\nEnjoy the convenience of managing your finances online. "
+			        		+ "\nIf you have any queries or require support, don't hesitate to get in touch with us. "
+			        		+ "\nHappy banking!";
+				        
+			        emailController.sendEmail(email, subject, text);
 			        return ResponseEntity.ok(new SuccessResponse<>("Registration for Internet Banking is successful"));	
 				} else {
 					throw new ResourceConflictException("User account already exists");

@@ -40,10 +40,24 @@ public class UserController {
 	@Autowired
 	private UserRepository userRepository;
 	
+	@Autowired
+	private EmailController emailController;
+	
+	
 	@PostMapping("/user")
 	public ResponseEntity<?>  addUser(@RequestBody User newUser) {
 		try {
 			userRepository.save(newUser);
+			String email = newUser.getEmail();
+			String subject = "Welcome to namma bank";
+	        String text = "Dear " + newUser.getFirstName()
+	        		+ ",\n\n Thank you for choosing namma bank! "
+	        		+ "\n We're pleased to inform you that your new account has been successfully created. "
+	        		+ "\n\t Your account number is: " + newUser.getAccount().getAccountNum()
+	        		+ ". \n Please keep this number safe for future reference. "
+	        		+ "\n If you have any questions or need assistance, feel free to reach out to us. "
+	        		+ "\n\n Welcome aboard!";
+	        emailController.sendEmail(email, subject, text);
 		} catch(IllegalArgumentException ex) {
 	        throw new IllegalArgumentException("Arguments are not valid");			
 		}
