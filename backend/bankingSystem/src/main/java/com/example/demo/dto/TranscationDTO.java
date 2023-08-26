@@ -1,12 +1,14 @@
 package com.example.demo.dto;
 
+import java.sql.Date;
+
 public class TranscationDTO {
 	private long transcactionId;
 	private String transcationType;
 	private double amountTransfer;
 	private long creditAccNum;
 	private long debitAccNum;
-	private long timestamp;
+	private Date timestamp;
 	private String remark;
 	
 	public TranscationDTO() {
@@ -14,7 +16,7 @@ public class TranscationDTO {
 	}
 
 	public TranscationDTO(long transcactionId, String transcationType, double amountTransfer, long creditAccNum,
-			long debitAccNum, long timestamp, String remark) {
+			long debitAccNum, Date timestamp, String remark) {
 		super();
 		this.transcactionId = transcactionId;
 		this.transcationType = transcationType;
@@ -65,11 +67,11 @@ public class TranscationDTO {
 		this.debitAccNum = debitAccNum;
 	}
 
-	public long getTimestamp() {
+	public Date getTimestamp() {
 		return timestamp;
 	}
 
-	public void setTimestamp(long timestamp) {
+	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
 	}
 

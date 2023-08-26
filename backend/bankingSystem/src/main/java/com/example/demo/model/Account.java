@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import java.util.List;
+import java.util.Random;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -29,6 +30,8 @@ public class Account {
 	@Id
 	@GeneratedValue
 	private long accountNum;
+//	Random random = new Random();
+//    accountNum = random.nextInt(9000) + 1000;
 	@Column(unique = true)
 	private String username;
 	private String loginPasswd;
@@ -64,6 +67,7 @@ public class Account {
 	public Account(long accountNum, String username, String loginPasswd, String transcationPasswd, double balance,
 			String openDate, String accountType, int isDebitCard, int isCreditCard, int isNetBanking, long timestamp,
 			User user, List<Transcation> transcations, List<Payee> payee) {
+
 		super();
 		this.accountNum = accountNum;
 		this.username = username;
@@ -79,6 +83,7 @@ public class Account {
 		this.user = user;
 		this.transcations = transcations;
 		this.payee = payee;
+		
 	}
 
 
@@ -123,6 +128,7 @@ public class Account {
 
 
 	public double getBalance() {
+		System.out.println("getBalance: "+ balance);
 		return balance;
 	}
 

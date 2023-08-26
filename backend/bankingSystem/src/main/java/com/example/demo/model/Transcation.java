@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import java.sql.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -21,11 +22,11 @@ public class Transcation {
 	private double amountTransfer;
 	private long creditAccNum;
 //	private long deb_acc_num;
-	private long timestamp;
+	private Date timestamp;
 	private String remark;
 	
 	@ManyToOne
-	@JoinColumn(name = "debitAccNum", referencedColumnName = "accountNum", nullable = false)
+	@JoinColumn(name = "debitAccNum", referencedColumnName = "accountNum", nullable = true)
 	@JsonBackReference
 	private Account account;
 
@@ -34,7 +35,7 @@ public class Transcation {
 	}
 
 	public Transcation(long transcactionId, String transcationType, double amountTransfer, long creditAccNum,
-			long timestamp, String remark, Account account) {
+			Date timestamp, String remark, Account account) {
 		super();
 		this.transcactionId = transcactionId;
 		this.transcationType = transcationType;
@@ -77,11 +78,11 @@ public class Transcation {
 		this.creditAccNum = creditAccNum;
 	}
 
-	public long getTimestamp() {
+	public Date getTimestamp() {
 		return timestamp;
 	}
 
-	public void setTimestamp(long timestamp) {
+	public void setTimestamp(Date timestamp) {
 		this.timestamp = timestamp;
 	}
 
