@@ -8,6 +8,7 @@ public class JwtResponse {
 	private String username;
 	private String email;
 	private long accountNum;
+	private long userId;
 	public JwtResponse() {
 		super();
 	}
@@ -18,6 +19,7 @@ public class JwtResponse {
 		this.email = email;
 		this.accountNum = accountNum;
 	}
+	
 	public String getJwtToken() {
 		return jwtToken;
 	}
@@ -48,6 +50,7 @@ public class JwtResponse {
         this.username = builder.username;
         this.email = builder.email;
         this.accountNum = builder.accountNum;
+        this.userId = builder.userId;
     }
 	 // Builder class
     public static class Builder {
@@ -55,6 +58,7 @@ public class JwtResponse {
         private String username;
         private String email;
         private long accountNum;
+        private long userId;
 
         public Builder jwtToken(String jwtToken) {
             this.jwtToken = jwtToken;
@@ -76,8 +80,27 @@ public class JwtResponse {
             return this;
         }
 
+        public Builder userId(long userId) {
+            this.userId = userId;
+            return this;
+        }
         public JwtResponse build() {
             return new JwtResponse(this);
         }
     }
+	public JwtResponse(String jwtToken, String username, String email, long accountNum, long userId) {
+		super();
+		this.jwtToken = jwtToken;
+		this.username = username;
+		this.email = email;
+		this.accountNum = accountNum;
+		this.userId = userId;
+	}
+	public long getUserId() {
+		return userId;
+	}
+	public void setUserId(long userId) {
+		this.userId = userId;
+	}
+	
 }

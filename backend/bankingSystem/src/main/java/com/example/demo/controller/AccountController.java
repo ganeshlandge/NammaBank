@@ -106,6 +106,7 @@ public class AccountController {
 				.jwtToken(token)
 				.username(userDetails.getUsername())
 				.accountNum(account.get().getAccountNum())
+				.userId(account.get().getUser().getId())
 				.email(account.get().getUser().getEmail())
 				.build();
 //		return new ResponseEntity<>(response, HttpStatus.OK);
