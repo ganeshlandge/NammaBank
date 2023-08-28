@@ -5,6 +5,8 @@ import java.time.Duration;
 import java.util.Optional;
 import java.util.Random;
 
+import javax.validation.constraints.Null;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.http.ResponseEntity;
@@ -103,7 +105,7 @@ public class AccountController {
 	        }
 	        Optional<Account> currentAccount = accountRepository.findById(newAccount.getAccountNum());
 			if(currentAccount.isPresent()) {
-				if(currentAccount.get().getUsername().isEmpty() || currentAccount.get().getUsername().isBlank()) {
+				if(currentAccount.get().getUsername() == null || currentAccount.get().getUsername().isEmpty() || currentAccount.get().getUsername().isBlank()) {
 					currentAccount.get().setUsername(newAccount.getUsername());
 					currentAccount.get().setLoginPasswd(newAccount.getLoginPasswd());
 					currentAccount.get().setTranscationPasswd(newAccount.getTranscationPasswd());
