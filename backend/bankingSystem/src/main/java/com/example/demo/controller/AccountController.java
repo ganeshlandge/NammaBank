@@ -108,7 +108,8 @@ public class AccountController {
 				.accountNum(account.get().getAccountNum())
 				.email(account.get().getUser().getEmail())
 				.build();
-		return new ResponseEntity<>(response, HttpStatus.OK);
+//		return new ResponseEntity<>(response, HttpStatus.OK);
+		return ResponseEntity.ok(new SuccessResponse<>("Login successful", response));
 //		Optional<Account> account = accountRepository.findByUsernameAndLoginPasswd(login.getUsername(), login.getPassword());
 //		if(account.isPresent()) {
 //	        return ResponseEntity.ok(new SuccessResponse<>("Login successful"));
@@ -129,11 +130,11 @@ public class AccountController {
 		}
 
 	}
-
-	@ExceptionHandler(BadCredentialsException.class)
-	public String exceptionHandler() {
-		return "Credentials Invalid !!";
-	}
+//
+//	@ExceptionHandler(BadCredentialsException.class)
+//	public String exceptionHandler() {
+//		return "Credentials Invalid !!";
+//	}
 
 	@PostMapping("/netbanking/register")
 	public ResponseEntity<?> register(@RequestBody Account account) {
