@@ -1,40 +1,26 @@
 package com.example.demo.controller;
 
-import java.sql.Timestamp;
-import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
-
-import javax.validation.ConstraintViolationException;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.SuccessResponse;
-import com.example.demo.exception.InternalServerException;
 import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.exception.UserNotFoundException;
-import com.example.demo.model.Account;
-import com.example.demo.model.ApiResponse;
-import com.example.demo.model.ForgotPassword;
 import com.example.demo.model.User;
-import com.example.demo.repository.ForgotPasswordRepository;
 import com.example.demo.repository.UserRepository;
 
 
 @RestController
+@CrossOrigin("*")
 public class UserController {
 	
 	@Autowired

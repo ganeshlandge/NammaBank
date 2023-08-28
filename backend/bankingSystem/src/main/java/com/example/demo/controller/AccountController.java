@@ -33,6 +33,7 @@ import com.example.demo.repository.ForgotUsernameRepository;
 import com.example.demo.repository.UserRepository;
 
 @RestController
+@CrossOrigin("*")
 public class AccountController {
 	
 	@Autowired
