@@ -5,15 +5,20 @@ import java.time.Duration;
 import java.util.Optional;
 import java.util.Random;
 
+import javax.validation.constraints.Null;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.AccountDTO;
+import com.example.demo.dto.LoginResponse;
 import com.example.demo.dto.NewPasswordDTO;
 import com.example.demo.dto.SuccessResponse;
 import com.example.demo.exception.BadRequestException;
@@ -54,7 +59,12 @@ public class AccountController {
 	public ResponseEntity<?>  login(@RequestBody Login login) {
 		Optional<Account> account = accountRepository.findByUsernameAndLoginPasswd(login.getUsername(), login.getPassword());
 		if(account.isPresent()) {
-	        return ResponseEntity.ok(new SuccessResponse<>("Login successful"));
+			LoginResponse resp = new LoginResponse();
+			resp.setUserId(account.get().getUser().getId());
+			resp.setAccountNum(account.get().getAccountNum());
+			resp.setUsername(account.get().getUsername());
+			resp.setEmail(account.get().getUser().getEmail());
+	        return ResponseEntity.ok(new SuccessResponse<>("Login successful",resp));
 		} else {
 			throw new UnauthorizedException("Username or password is incorrect");
 		}
@@ -102,7 +112,7 @@ public class AccountController {
 	        }
 	        Optional<Account> currentAccount = accountRepository.findById(newAccount.getAccountNum());
 			if(currentAccount.isPresent()) {
-				if(currentAccount.get().getUsername().isEmpty() || currentAccount.get().getUsername().isBlank()) {
+				if(currentAccount.get().getUsername() == null || currentAccount.get().getUsername().isEmpty() || currentAccount.get().getUsername().isBlank()) {
 					currentAccount.get().setUsername(newAccount.getUsername());
 					currentAccount.get().setLoginPasswd(newAccount.getLoginPasswd());
 					currentAccount.get().setTranscationPasswd(newAccount.getTranscationPasswd());
@@ -240,6 +250,15 @@ public class AccountController {
 			accountRepository.save(currentAccount.get());
 //			TODO: check if save operation fails
 	        return ResponseEntity.ok(new SuccessResponse<>("Updated password successfully"));
+		}
+		throw new ResourceNotFoundException("Account does not exists");
+	}
+	
+	@GetMapping("/netbanking/{username}")
+	public ResponseEntity<?> getAccountDetails(@PathVariable String username){
+		Optional<Account> account = accountRepository.findByUsername(username);
+		if(account.isPresent()) {
+			return ResponseEntity.ok(account.get());
 		}
 		throw new ResourceNotFoundException("Account does not exists");
 	}
