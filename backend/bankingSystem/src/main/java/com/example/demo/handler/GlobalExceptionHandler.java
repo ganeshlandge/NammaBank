@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.example.demo.dto.ErrorResponse;
+import com.example.demo.exception.BadCredentialsException;
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.InternalServerException;
 import com.example.demo.exception.ResourceConflictException;
@@ -49,6 +50,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<ErrorResponse> handleUnauthorizedException(UnauthorizedException ex) {
+    	ErrorResponse errorResponse = new ErrorResponse("error", ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+    }
+    
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException ex) {
     	ErrorResponse errorResponse = new ErrorResponse("error", ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
