@@ -28,6 +28,7 @@ import com.example.demo.mapper.Mapper;
 import com.example.demo.model.Account;
 import com.example.demo.model.Payee;
 import com.example.demo.model.Transcation;
+import com.example.demo.model.User;
 import com.example.demo.repository.AccountRepository;
 import com.example.demo.repository.TranscationRepository;
 import org.springframework.data.domain.PageRequest;
@@ -42,17 +43,43 @@ public class TranscationController {
 	@Autowired
 	private AccountRepository accountRepository;
 	
+	@Autowired
+	private EmailController emailController;
+	
 	@PostMapping("/deposit")
 	public ResponseEntity<?> addMoney(@RequestBody Transcation tr) {
 
 		Optional<Account> currentAccount = accountRepository.findById(tr.getCreditAccNum());
 		try {
 			if(currentAccount.isPresent()) {
-//				Date currentTimestamp = new Date(System.currentTimeMillis());
-//	            tr.setTimestamp(currentTimestamp);
+				Date currentTimestamp = new Date(System.currentTimeMillis());
+	            tr.setTimestamp(currentTimestamp);
 				transcationRepository.save(tr);
+				
 				currentAccount.get().setBalance(currentAccount.get().getBalance()+tr.getAmountTransfer());
 				accountRepository.save(currentAccount.get());
+				
+				User user = currentAccount.get().getUser();
+				String email = user.getEmail();
+				
+				String subject = "Deposit Transaction Alert";
+				String text = "\n\n Dear " + user.getFirstName() 
+				+ "\n The deposit is successfully processed. \n"
+				+ "Here are the details \n"
+				+ " The amount credited/received is INR " + tr.getAmountTransfer()
+				+ " in your account " + currentAccount.get().getAccountNum()
+				+ "\n on " + tr.getTimestamp()
+				+ "\n Your Availabe balance is INR " + currentAccount.get().getBalance() + ".\n"
+        		+ "\n Assuring you the best of our services."
+        		+ "\n If you have any queries or require support, "
+        		+ "don't hesitate to get in touch with us.\n "
+        		+ "\n Thanks for choosing Namma Bank! \n"
+        		+ "\n Warm Regards,"
+        		+ "\n Namma Bank.";
+			        
+		        emailController.sendEmail(email, subject, text);
+				
+				
 				SuccessResponse<String> successResponse = new SuccessResponse<>("Transaction Completed!");
 		        return ResponseEntity.ok(successResponse);
 			}
@@ -78,18 +105,58 @@ public class TranscationController {
 	        }
 			if(tr.getAmountTransfer() <= currentAccount.get().getBalance()){	
 
-//				Date currentTimestamp = new Date(System.currentTimeMillis());
-//	            tr.setTimestamp(currentTimestamp);
+				Date currentTimestamp = new Date(System.currentTimeMillis());
+	            tr.setTimestamp(currentTimestamp);
 				transcationRepository.save(tr);
 				currentAccount.get().setBalance(currentAccount.get().getBalance() - tr.getAmountTransfer());
 				accountRepository.save(currentAccount.get());
+				
+				User user = currentAccount.get().getUser();
+				String email = user.getEmail();
+				
+				String subject = "Transaction Alert";
+				String text = "\n Dear " + user.getFirstName() + ",\n"
+		        		+ "\n Your Account number " + currentAccount.get().getAccountNum()
+		        		+ " is debited for INR " + tr.getAmountTransfer() + " on " + tr.getTimestamp()
+		        		+ ", through "+ tr.getTranscationType()
+		        		+ " and A/c " + tr.getCreditAccNum() + " is credited." + "\n"
+		        		+ "\n Availabe balance is INR " + currentAccount.get().getBalance() + ".\n"
+		        		+ "\n Assuring you the best of our services."
+		        		+ "\n If you have any queries or require support, "
+		        		+ "don't hesitate to get in touch with us. \n"
+		        		+ "\n Thanks for choosing Namma Bank! \n"
+		        		+ "\n Warm Regards,"
+		        		+ "\n Namma Bank.";
+			        
+		        emailController.sendEmail(email, subject, text);
 				
 				// update the credit account,if it is in same bank
 				Optional<Account> creditAccount = accountRepository.findById(tr.getCreditAccNum());
 				if(creditAccount.isPresent()) {
 					creditAccount.get().setBalance(creditAccount.get().getBalance() + tr.getAmountTransfer());
 					accountRepository.save(creditAccount.get());
+					
+					user = creditAccount.get().getUser();
+					email = user.getEmail();
+					
+					subject = "Transaction Alert";
+					text = "\n\n Dear " + user.getFirstName() 
+							+ "\n You have received a credit in your account.\n"
+							+ "\n Here are the details \n"
+							+ "The amount credited/received is INR " + tr.getAmountTransfer()
+							+ " in your account " + creditAccount.get().getAccountNum()+ 
+							" on " + tr.getTimestamp() + "\n "
+							+ "\n Your Availabe balance is INR " + creditAccount.get().getBalance() + ".\n"
+			        		+ "\n Assuring you the best of our services."
+			        		+ "\n If you have any queries or require support, "
+			        		+ "don't hesitate to get in touch with us.\n "
+			        		+ "\n Thanks for choosing Namma Bank! \n"
+			        		+ "\n Warm Regards,"
+			        		+ "\n Namma Bank.";
+				        
+			        emailController.sendEmail(email, subject, text);
 				}
+				
 				SuccessResponse<String> successResponse = new SuccessResponse<>("Transaction Completed!");
 		        return ResponseEntity.ok(successResponse);
 			}

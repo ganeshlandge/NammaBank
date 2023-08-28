@@ -81,10 +81,15 @@ public class AccountController {
 			String email = user.getEmail();
 			
 			Random random = new Random();
-	        int code = random.nextInt(9000) + 1000; // Generate a number between 1000 and 9999
+	        int code = random.nextInt(9000) + 1000; 
 	        
 	        String subject = "Internet Banking registration OTP";
-	        String text = "Your OTP for netbanking registration is: " + code;
+	        String text = " Dear Customer, \n "
+	        		+ "Your OTP for netbanking registration is: " + code + ".\n"
+	        		+ "\n NEVER share OTP. Not you? Contact us \n"
+	        		+ "\n Thanks for choosing Namma Bank! \n"
+	        		+ "\n Warm Regards,"
+	        		+ "\n Namma Bank.";
 		        
 	        emailController.sendEmail(email, subject, text);
 		        
@@ -117,6 +122,7 @@ public class AccountController {
 					currentAccount.get().setLoginPasswd(newAccount.getLoginPasswd());
 					currentAccount.get().setTranscationPasswd(newAccount.getTranscationPasswd());
 					accountRepository.save(currentAccount.get());
+					
 					User user = currentAccount.get().getUser();
 					if (user.getEmail() == null || user.getEmail().isBlank() || user.getEmail().isEmpty()) {
 				        throw new BadRequestException("Invalid request. Email is not linked with this account.");
@@ -125,11 +131,13 @@ public class AccountController {
 					String subject = "Internet Banking registration completed";
 			        String text = "Congratulations! "
 			        		+ "\n\n Dear " + user.getFirstName() 
-			        		+ ",\n Your netbanking registration is now complete. "
-			        		+ "\n\n You can log in using your username" + currentAccount.get().getUsername() +" and the password you've set during the registration process. "
-			        		+ "\nEnjoy the convenience of managing your finances online. "
-			        		+ "\nIf you have any queries or require support, don't hesitate to get in touch with us. "
-			        		+ "\nHappy banking!";
+			        		+ ",\n Your netbanking registration is now complete. \n"
+			        		+ "\n\n You can log in using your username: " + currentAccount.get().getUsername() +" and the password you've set during the registration process. \n"
+			        		+ "\n Enjoy the convenience of managing your finances online."
+			        		+ "\n If you have any queries or require support, don't hesitate to get in touch with us.\n "
+			        		+ "\n Thanks for choosing Namma Bank! \n"
+			        		+ "\n Warm Regards,"
+			        		+ "\n Namma Bank.";
 				        
 			        emailController.sendEmail(email, subject, text);
 			        return ResponseEntity.ok(new SuccessResponse<>("Registration for Internet Banking is successful"));	
@@ -160,10 +168,16 @@ public class AccountController {
 			String email = user.getEmail();
 			
 			Random random = new Random();
-	        int code = random.nextInt(9000) + 1000; // Generate a number between 1000 and 9999
+	        int code = random.nextInt(9000) + 1000;
 	        
-	        String subject = "Forgot Username - OTP";
-	        String text = "Your username is: " + currentAccount.get().getUsername() + "\nYour OTP is: " + code;
+	        String subject = "OTP for Forgot Username";
+	        String text = "Dear Customer, " 
+	        		+ "\n Your username is: " + currentAccount.get().getUsername()
+	        		+ "\n Your OTP is: " + code + ".\n"
+	        		+ "\n NEVER share OTP. Not you? Contact us. \n"
+	        		+ "\n Thanks for choosing Namma Bank! \n"
+	        		+ "\n Warm Regards,"
+	        		+ "\n Namma Bank.";
 	        
 	        emailController.sendEmail(email, subject, text);
 	        
@@ -210,8 +224,13 @@ public class AccountController {
 			
 			Random random = new Random();
 	        int code = random.nextInt(9000) + 1000; // Generate a number between 1000 and 9999
-	        String subject = "Forgot password - OTP";
-	        String text = "Your password reset OTP is: " + code;
+	        String subject = "OTP for reset Password";
+	        String text = "Dear Customer, " 
+	        		+ "\n Your password reset OTP is: " + code + ".\n"
+	        		+ "\n NEVER share OTP. Not you? Contact us. \n"
+	        		+ "\n Thanks for choosing Namma Bank! \n"
+	        		+ "\n Warm Regards,"
+	        		+ "\n Namma Bank.";
 	        
 	        emailController.sendEmail(email, subject, text);
 	        
@@ -249,6 +268,24 @@ public class AccountController {
 			currentAccount.get().setLoginPasswd(newpasswd.getPassword());
 			accountRepository.save(currentAccount.get());
 //			TODO: check if save operation fails
+			User user = currentAccount.get().getUser();
+			if (user.getEmail() == null || user.getEmail().isBlank() || user.getEmail().isEmpty()) {
+		        throw new BadRequestException("Invalid request. Email error!x This account is not registered for netbanking");
+		    }
+			String email = user.getEmail();
+			
+			Random random = new Random();
+	        int code = random.nextInt(9000) + 1000; // Generate a number between 1000 and 9999
+	        String subject = "Alert! Password Changed";
+	        String text = "Dear Customer, " 
+	        		+ "\n Your password is changed successfully! " + code + "/\n"
+	        		+ "\n NEVER share OTP. Not you? Contact us.\n"
+	        		+ "\n Thanks for choosing Namma Bank! \n"
+	        		+ "\n Warm Regards,"
+	        		+ "\n Namma Bank.";
+	        
+	        emailController.sendEmail(email, subject, text);
+			
 	        return ResponseEntity.ok(new SuccessResponse<>("Updated password successfully"));
 		}
 		throw new ResourceNotFoundException("Account does not exists");
