@@ -36,7 +36,7 @@ public class SecurityConfig {
         	.authorizeHttpRequests(auth-> auth.antMatchers("/netbanking/**").permitAll()
         			.antMatchers(HttpMethod.POST, "/user").permitAll()
 //        			.regexMatchers("/netbanking/**").permitAll()
-//        			.regexMatchers("/user").permitAll()
+        			.regexMatchers("/user").permitAll()
         			.anyRequest().authenticated())
         	.exceptionHandling(ex-> ex.authenticationEntryPoint(point))
         	.sessionManagement(session-> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
