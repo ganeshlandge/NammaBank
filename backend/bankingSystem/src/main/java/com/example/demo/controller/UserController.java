@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,16 +34,22 @@ public class UserController {
 	@PostMapping("/user")
 	public ResponseEntity<?>  addUser(@RequestBody User newUser) {
 		try {
+
+			Date currentTimestamp = new Date(System.currentTimeMillis());
+			newUser.getAccount().setOpenDate(currentTimestamp);
 			userRepository.save(newUser);
 			String email = newUser.getEmail();
 			String subject = "Welcome to namma bank";
 	        String text = "Dear " + newUser.getFirstName()
 	        		+ ",\n\n Thank you for choosing namma bank! "
-	        		+ "\n We're pleased to inform you that your new account has been successfully created. "
-	        		+ "\n\t Your account number is: " + newUser.getAccount().getAccountNum()
-	        		+ ". \n Please keep this number safe for future reference. "
+	        		+ "\n We're pleased to inform you that your new account has been successfully created. \n"
+	        		+ "\n\t Your account number is: " + newUser.getAccount().getAccountNum() +". \n"
+	        		+ " \n Please keep this number safe for future reference. "
 	        		+ "\n If you have any questions or need assistance, feel free to reach out to us. "
-	        		+ "\n\n Welcome aboard!";
+	        		+ "\n Thanks for choosing Namma Bank! \n"
+	        		+ "\n Warm Regards,"
+	        		+ "\n Namma Bank.";
+		        
 	        emailController.sendEmail(email, subject, text);
 		} catch(IllegalArgumentException ex) {
 	        throw new IllegalArgumentException("Arguments are not valid");			

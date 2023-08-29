@@ -64,12 +64,12 @@ public class TranscationController {
 				
 				String subject = "Deposit Transaction Alert";
 				String text = "\n\n Dear " + user.getFirstName() 
-				+ "\n The deposit is successfully processed. \n"
+				+ ",\n The deposit is successfully processed. \n"
 				+ "Here are the details \n"
-				+ " The amount credited/received is INR " + tr.getAmountTransfer()
+				+ "\n The amount credited/received is INR " + tr.getAmountTransfer()
 				+ " in your account " + currentAccount.get().getAccountNum()
-				+ "\n on " + tr.getTimestamp()
-				+ "\n Your Availabe balance is INR " + currentAccount.get().getBalance() + ".\n"
+				+ " on " + tr.getTimestamp()
+				+ ".\n Your Availabe balance is INR " + currentAccount.get().getBalance() + ".\n"
         		+ "\n Assuring you the best of our services."
         		+ "\n If you have any queries or require support, "
         		+ "don't hesitate to get in touch with us.\n "
@@ -78,7 +78,6 @@ public class TranscationController {
         		+ "\n Namma Bank.";
 			        
 		        emailController.sendEmail(email, subject, text);
-				
 				
 				SuccessResponse<String> successResponse = new SuccessResponse<>("Transaction Completed!");
 		        return ResponseEntity.ok(successResponse);

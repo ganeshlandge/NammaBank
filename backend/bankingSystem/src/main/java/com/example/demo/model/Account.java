@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import java.sql.Date;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
@@ -35,12 +36,12 @@ public class Account implements UserDetails{
 	private String loginPasswd;
 	private String transcationPasswd;
 	private double balance;
-	private String openDate;
+	private Date openDate;
 	private String accountType;
 	private int isDebitCard;
 	private int isCreditCard;
 	private int isNetBanking;
-	private long timestamp;
+//	private long timestamp;
 	
 	@OneToOne
 	@JoinColumn(name = "user_id")
@@ -67,27 +68,7 @@ public class Account implements UserDetails{
         return random.nextInt(900000) + 100000; 
     }
 
-	public Account(long accountNum, String username, String loginPasswd, String transcationPasswd, double balance,
-			String openDate, String accountType, int isDebitCard, int isCreditCard, int isNetBanking, long timestamp,
-			User user, List<Transcation> transcations, List<Payee> payee) {
-
-		super();
-		this.accountNum = accountNum;
-		this.username = username;
-		this.loginPasswd = loginPasswd;
-		this.transcationPasswd = transcationPasswd;
-		this.balance = balance;
-		this.openDate = openDate;
-		this.accountType = accountType;
-		this.isDebitCard = isDebitCard;
-		this.isCreditCard = isCreditCard;
-		this.isNetBanking = isNetBanking;
-		this.timestamp = timestamp;
-		this.user = user;
-		this.transcations = transcations;
-		this.payee = payee;
-		
-	}
+	
 
 
 	public long getAccountNum() {
@@ -141,12 +122,44 @@ public class Account implements UserDetails{
 	}
 
 
-	public String getOpenDate() {
+	public Account(long accountNum, double balance, Date openDate, String accountType, int isDebitCard,
+			int isCreditCard, int isNetBanking, User user, List<Transcation> transcations, List<Payee> payee) {
+		super();
+		this.accountNum = accountNum;
+		this.balance = balance;
+		this.openDate = openDate;
+		this.accountType = accountType;
+		this.isDebitCard = isDebitCard;
+		this.isCreditCard = isCreditCard;
+		this.isNetBanking = isNetBanking;
+		this.user = user;
+		this.transcations = transcations;
+		this.payee = payee;
+	}
+	public Date getOpenDate() {
 		return openDate;
 	}
 
 
-	public void setOpenDate(String openDate) {
+	public Account(long accountNum, String username, String loginPasswd, String transcationPasswd, double balance,
+			Date openDate, String accountType, int isDebitCard, int isCreditCard, int isNetBanking, User user,
+			List<Transcation> transcations, List<Payee> payee) {
+		super();
+		this.accountNum = accountNum;
+		this.username = username;
+		this.loginPasswd = loginPasswd;
+		this.transcationPasswd = transcationPasswd;
+		this.balance = balance;
+		this.openDate = openDate;
+		this.accountType = accountType;
+		this.isDebitCard = isDebitCard;
+		this.isCreditCard = isCreditCard;
+		this.isNetBanking = isNetBanking;
+		this.user = user;
+		this.transcations = transcations;
+		this.payee = payee;
+	}
+	public void setOpenDate(Date openDate) {
 		this.openDate = openDate;
 	}
 
@@ -188,16 +201,6 @@ public class Account implements UserDetails{
 
 	public void setIsNetBanking(int isNetBanking) {
 		this.isNetBanking = isNetBanking;
-	}
-
-
-	public long getTimestamp() {
-		return timestamp;
-	}
-
-
-	public void setTimestamp(long timestamp) {
-		this.timestamp = timestamp;
 	}
 
 

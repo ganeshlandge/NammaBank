@@ -33,6 +33,17 @@ public class Transcation {
 	public Transcation() {
 		super();
 	}
+	
+
+	public Transcation(long transcactionId, double amountTransfer, long creditAccNum, Date timestamp, String remark) {
+		super();
+		this.transcactionId = transcactionId;
+		this.amountTransfer = amountTransfer;
+		this.creditAccNum = creditAccNum;
+		this.timestamp = timestamp;
+		this.remark = remark;
+	}
+
 
 	public Transcation(long transcactionId, String transcationType, double amountTransfer, long creditAccNum,
 			Date timestamp, String remark, Account account) {
