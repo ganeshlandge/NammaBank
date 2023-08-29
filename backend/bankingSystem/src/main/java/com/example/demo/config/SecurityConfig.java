@@ -32,7 +32,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.csrf(csrf-> csrf.disable())
-        	.cors(cors-> cors.disable())
+        	.cors()
+        	.and()
         	.authorizeHttpRequests(auth-> auth.antMatchers("/netbanking/**").permitAll()
         			.antMatchers(HttpMethod.POST, "/user").permitAll()
 //        			.regexMatchers("/netbanking/**").permitAll()
