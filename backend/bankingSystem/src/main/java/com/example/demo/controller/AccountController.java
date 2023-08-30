@@ -330,7 +330,7 @@ public class AccountController {
 	public ResponseEntity<?> setNewPassword(@RequestBody NewPasswordDTO newpasswd) {
 		Optional<Account> currentAccount = accountRepository.findById(newpasswd.getAccountNum());
 		if (currentAccount.isPresent()) {
-			currentAccount.get().setLoginPasswd(newpasswd.getPassword());
+			currentAccount.get().setLoginPasswd(passwordEncoder.encode(newpasswd.getPassword()));
 			accountRepository.save(currentAccount.get());
 //			TODO: check if save operation fails
 			User user = currentAccount.get().getUser();
